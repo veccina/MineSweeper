@@ -4,22 +4,24 @@ import java.util.Scanner;
 public class MineSweeper {
     private char[][] board;
     private char[][] solution;
-    private int size;
+    private int numRows;
+    private int numCols;
     private int mineCount;
 
     // MineSweeper sınıfının kurucu metodunu oluşturuyoruz.
-    public MineSweeper(int size) {
-        this.size = size;
-        this.mineCount = size * size / 4; // // Diziye ait eleman sayısının çeyreği kadar mayın yerleştiriyoruz.
-        this.board = new char[size][size];
-        this.solution = new char[size][size];
+    public MineSweeper(int numRows, int numCols) {
+        this.numRows = numRows;
+        this.numCols = numCols;
+        this.mineCount = numRows * numCols / 4;  // Diziye ait eleman sayısının çeyreği kadar mayın yerleştiriyoruz.
+        this.board = new char[numRows][numCols];
+        this.solution = new char[numRows][numCols];
     }
 
     // Oyun tahtasını başlatan metodumuzu oluşturuyoruz.
     public void initializeGame() {
         // Oyun tahtalarını başlatan döngüyü oluşturuyoruz.
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
                 board[i][j] = '-';
                 solution[i][j] = '0';
             }
@@ -36,8 +38,8 @@ public class MineSweeper {
         for (int i = 0; i < mineCount; i++) {
             int row, col;
             do {
-                row = random.nextInt(size);
-                col = random.nextInt(size);
+                row = random.nextInt(numRows);
+                col = random.nextInt(numCols);
             } while (solution[row][col] == 'M');
 
             solution[row][col] = 'M';
@@ -46,8 +48,8 @@ public class MineSweeper {
 
     // Tahtayı ekrana yazdıran metodumuzu oluşturuyoruz.
     public void displayBoard(char[][] board) {
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
                 System.out.print(board[i][j] + " ");
             }
             System.out.println();
@@ -68,7 +70,7 @@ public class MineSweeper {
             System.out.print("Sütun girin: ");
             int col = scanner.nextInt();
 
-            if (row < 0 || row >= size || col < 0 || col >= size) {
+            if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
                 System.out.println("Geçersiz hamle. Lütfen tekrar deneyin.");
                 continue;
             }
@@ -84,7 +86,6 @@ public class MineSweeper {
                 }
             }
         }
-
         scanner.close();
     }
 
@@ -103,7 +104,7 @@ public class MineSweeper {
                 int newRow = row + dr[i];
                 int newCol = col + dc[i];
 
-                if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size) {
+                if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols) {
                     uncoverCell(newRow, newCol);
                 }
             }
@@ -120,7 +121,7 @@ public class MineSweeper {
             int newRow = row + dr[i];
             int newCol = col + dc[i];
 
-            if (newRow >= 0 && newRow < size && newCol >= 0 && newCol < size && solution[newRow][newCol] == 'M') {
+            if (newRow >= 0 && newRow < numRows && newCol >= 0 && newCol < numCols && solution[newRow][newCol] == 'M') {
                 minesAround++;
             }
         }
@@ -128,17 +129,18 @@ public class MineSweeper {
         return minesAround;
     }
 
+
     // Oyunun kazanılıp kazanılmadığını kontrol eden metodu da tanımlıyoruz.
 
     public boolean isGameWon() {
         int uncoveredCount = 0;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numCols; j++) {
                 if (board[i][j] != '-') {
                     uncoveredCount++;
                 }
             }
         }
-        return uncoveredCount == (size * size - mineCount);
+        return uncoveredCount == (numRows * numCols - mineCount);
     }
 }
