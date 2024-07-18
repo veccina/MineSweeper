@@ -8,18 +8,18 @@ public class MineSweeper {
     private int numCols;
     private int mineCount;
 
-    // MineSweeper sınıfının kurucu metodunu oluşturuyoruz.
+    // Constructor method for the MineSweeper class.
     public MineSweeper(int numRows, int numCols) {
         this.numRows = numRows;
         this.numCols = numCols;
-        this.mineCount = numRows * numCols / 4;  // Diziye ait eleman sayısının çeyreği kadar mayın yerleştiriyoruz.
+        this.mineCount = numRows * numCols / 4;  // Place mines equal to a quarter of the total number of elements in the array.
         this.board = new char[numRows][numCols];
         this.solution = new char[numRows][numCols];
     }
 
-    // Oyun tahtasını başlatan metodumuzu oluşturuyoruz.
+    // Method to initialize the game board.
     public void initializeGame() {
-        // Oyun tahtalarını başlatan döngüyü oluşturuyoruz.
+        // Loop to initialize the game boards.
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
                 board[i][j] = '-';
@@ -27,11 +27,11 @@ public class MineSweeper {
             }
         }
 
-        // Mayınları yerleştiriyoruz.
+        // Place the mines.
         placeMines();
     }
 
-    // Mayınları yerleştiren metodumuzu oluşturuyoruz.
+    // Method to place the mines.
     public void placeMines() {
         Random random = new Random();
 
@@ -46,7 +46,7 @@ public class MineSweeper {
         }
     }
 
-    // Tahtayı ekrana yazdıran metodumuzu oluşturuyoruz.
+    // Method to print the board to the screen.
     public void displayBoard(char[][] board) {
         for (int i = 0; i < numRows; i++) {
             for (int j = 0; j < numCols; j++) {
@@ -56,32 +56,32 @@ public class MineSweeper {
         }
     }
 
-    // Oyunu oynatan metodumuzu oluşturuyoruz. Kullanıcıdan değer alıyoruz.
+    // Method to play the game. We get input from the user.
     public void playGame() {
         Scanner scanner = new Scanner(System.in);
         boolean gameOver = false;
 
         while (!gameOver) {
-            System.out.println("Oyun Tahtası:");
+            System.out.println("Game Board:");
             displayBoard(board);
 
-            System.out.print("Satır girin: ");
+            System.out.print("Enter row: ");
             int row = scanner.nextInt();
-            System.out.print("Sütun girin: ");
+            System.out.print("Enter column: ");
             int col = scanner.nextInt();
 
             if (row < 0 || row >= numRows || col < 0 || col >= numCols) {
-                System.out.println("Geçersiz hamle. Lütfen tekrar deneyin.");
+                System.out.println("Invalid move. Please try again.");
                 continue;
             }
 
             if (solution[row][col] == 'M') {
-                System.out.println("Mayına bastınız! Oyun sona erdi.");
+                System.out.println("You hit a mine! Game over.");
                 gameOver = true;
             } else {
                 uncoverCell(row, col);
                 if (isGameWon()) {
-                    System.out.println("Tebrikler! Oyunu kazandınız!");
+                    System.out.println("Congratulations! You won the game!");
                     gameOver = true;
                 }
             }
@@ -89,7 +89,7 @@ public class MineSweeper {
         scanner.close();
     }
 
-    // Belirli bir hücreyi açan metodumuzu oluştuyoruz.
+    // Method to uncover a specific cell.
     public void uncoverCell(int row, int col) {
         if (board[row][col] != '-') return;
 
@@ -111,7 +111,7 @@ public class MineSweeper {
         }
     }
 
-    // Belirli bir hücre etrafındaki mayınları sayan metodu oluşturduk.
+    // Method to count mines around a specific cell.
     public int countMinesAround(int row, int col) {
         int minesAround = 0;
         int[] dr = {-1, -1, -1, 0, 0, 1, 1, 1};
@@ -129,9 +129,7 @@ public class MineSweeper {
         return minesAround;
     }
 
-
-    // Oyunun kazanılıp kazanılmadığını kontrol eden metodu da tanımlıyoruz.
-
+    // Method to check if the game is won.
     public boolean isGameWon() {
         int uncoveredCount = 0;
         for (int i = 0; i < numRows; i++) {
